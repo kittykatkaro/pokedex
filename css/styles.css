@@ -1,5 +1,5 @@
 /* color palette: https://coolors.co/003049-d62828-f77f00-fcbf49-eae2b7 */
-
+hmtl,
 body {
     display: grid;
     justify-content: center;
@@ -21,14 +21,7 @@ ul {
     margin: auto;
     padding: 0;
 }
-
-li {
-    display: block;
-    margin: 0 10px;
-    text-align: center;
-}
-
-.pokemon-button {
+.pokemon-info {
     background-color: #f77f00;
     border: none;
     color: white;
@@ -41,15 +34,68 @@ li {
     border-radius: 12px;
 }
 
-.pokemon-button:hover {
+.pokemon-info:hover {
     background-color: #d62828;
+}
+
+#modal-container {
+    display: none;
+}
+
+#modal-container.is-visible {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: auto;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+
+    z-index: 999; /* on top of everything */
+
+    overflow: auto; /* scroll if screen not high enough */
+
+    /*center the modal*/
+    display: grid;
+    text-align: center;
+}
+
+.modal {
+    display: inline-block;
+    background-color: #eae2b7;
+    border-radius: 12px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    margin: 10% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+}
+
+.modal-close {
+    float: right;
+    border: 0;
+    background: none;
+    color: #003049;
+    text-decoration: underline;
+}
+
+.modal h1 {
+    color: #780000;
+    font-size: 1.5em;
+    margin: 5px 0;
+}
+.modal p {
+    color: #003049;
+    font-size: 1em;
+    margin: 0;
 }
 
 @media (max-width: 600px) {
     h1 {
         font-size: 1.5em;
     }
-    .pokemon-button {
+    .pokemon-info {
         padding: 8px 16px;
         font-size: 14px;
     }
