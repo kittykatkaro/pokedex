@@ -104,8 +104,8 @@ pokemonRepository.loadList().then(function () {
   });
 });
 
-// Add an event listener to the navigation menu items
-document.querySelectorAll('.nav-link').forEach((item) => {
+ // Add an event listener to the navigation menu items
+ document.querySelectorAll('.nav-link').forEach((item) => {
   item.addEventListener('click', (event) => {
     let typeInfo = event.target.getAttribute('data-type');
     filterPokemonByType(typeInfo);
