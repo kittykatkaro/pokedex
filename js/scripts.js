@@ -1,7 +1,7 @@
 let pokemonRepository = (function () {
 
-  let pokemonList = [];
-  let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
+  const pokemonList = [];
+  const apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
 
   function add(pokemon) { //only adds pokemon to pokemonList if it is and object and has the correct object keys
     if (typeof pokemon === 'object') {
@@ -16,21 +16,51 @@ let pokemonRepository = (function () {
   }
 
   function addListItem(pokemon) {
+    console.log("Poke add list", pokemon)
     let listOfPokemons = document.querySelector('.pokemon-list');
-
     listItem = document.createElement('li');
     listItem.classList.add('col-12', 'col-sm-6', 'col-md-4', 'col-lg-3', 'mb-4'); // Responsive column classes and margin-bottom
 
-    let button = document.createElement('button');
-    button.innerHTML = `${pokemon.name}`;
-    button.classList.add('btn', 'btn-outline-dark');
-    button.setAttribute('data-bs-toggle', 'modal');
-    button.setAttribute('data-bs-target', '#pokemonModal');
+    // create card element
+    let card = document.createElement('div');
+    card.classList.add('card');
 
-    listItem.appendChild(button);
+    // create card image
+    let cardImg = document.createElement('img');
+    cardImg.src = pokemon.imageUrl;
+    cardImg.classList.add('card-img-top');
+    cardImg.alt = pokemon.name;
+
+    // create card body
+    let cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
+
+    // create card title
+    let cardTitle = document.createElement('h5');
+    cardTitle.classList.add('card-title');
+
+    // create card button
+    let cardButton = document.createElement('button');
+    cardButton.innerText = `${pokemon.name}`;
+    cardButton.classList.add('btn', 'btn-outline-dark');
+    cardButton.setAttribute('data-bs-toggle', 'modal');
+    cardButton.setAttribute('data-bs-target', '#pokemonModal');
+
+    // Append elements to card body
+    cardBody.appendChild(cardTitle);
+    cardBody.appendChild(cardButton);
+
+    // Append image and body to card
+    card.appendChild(cardImg);
+    card.appendChild(cardBody);
+
+    // Append card to list item
+    listItem.appendChild(card);
+
+    // Append list item to list of Pokémons
     listOfPokemons.appendChild(listItem);
 
-    button.addEventListener('click', function () {
+    cardButton.addEventListener('click', function () {
       showDetails(pokemon);
     });
   }
@@ -44,8 +74,11 @@ let pokemonRepository = (function () {
           name: item.name,
           detailsUrl: item.url
         };
-        add(pokemon);
-        loadDetails(pokemon); //loads Details for each pokemon
+        loadDetails(pokemon).then(poke => {
+          add(poke);
+          addListItem(poke)
+        }) //loads Details for each pokemon
+
       });
     }).catch(function () {
       console.log('error');
@@ -61,15 +94,15 @@ let pokemonRepository = (function () {
       item.height = details.height / 10;
       item.types = details.types;
       item.weight = details.weight / 10;
+
+      return item;
     }).catch(function () {
       console.log('error');
     });
   }
 
   function showDetails(item) {
-    loadDetails(item).then(function () {
-      showModal(item);
-    });
+    showModal(item);
   }
 
 
@@ -98,14 +131,10 @@ let pokemonRepository = (function () {
   };
 })();
 
-pokemonRepository.loadList().then(function () {
-  pokemonRepository.getAll().forEach(function (pokemon) {
-    pokemonRepository.addListItem(pokemon);
-  });
-});
+pokemonRepository.loadList();
 
- // Add an event listener to the navigation menu items
- document.querySelectorAll('.nav-link').forEach((item) => {
+// Add an event listener to the navigation menu items
+document.querySelectorAll('.nav-link').forEach((item) => {
   item.addEventListener('click', (event) => {
     let typeInfo = event.target.getAttribute('data-type');
     filterPokemonByType(typeInfo);
